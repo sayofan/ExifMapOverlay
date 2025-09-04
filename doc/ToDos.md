@@ -1,0 +1,3 @@
+- Pfeiltasten links rechts evtl. zum Spulen des Timers verwenden.
+- male entire window mouse draggable
+- save position in ini file
