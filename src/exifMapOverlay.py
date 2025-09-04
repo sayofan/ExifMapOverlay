@@ -55,41 +55,6 @@ def get_name_from_coordinates(lat, lon) -> str:
     except KeyError:
         return nomQuery.address()['city']
     # ToDo: parse some more info and handle more fields, like country, town, neighourhood
-    return nomQuery.address()['village']  # toDo: try 'city' if 'village' absent
-
-
-# def create_image_panel(image_path, place_name):
-#     # ToDo: Credit OpenStreetMap
-#     # Create the main Tkinter window
-#     root = tk.Tk()
-#     root.title("Image Panel")
-
-#     # Ensure the window is always on top
-#     root.attributes("-topmost", True)
-
-#     # Load the image
-#     if not os.path.exists(image_path):
-#         print(f"Error: File '{image_path}' not found.")
-#         return
-#     try:
-#         img = PhotoImage(file=image_path)
-#     except Exception as e:
-#         print(f"Error loading image: {e}")
-#         return
-
-#     # Create a label to display the image
-#     label = tk.Label(root, image=img)
-#     label.pack()
-#     # add second label with text
-#     txt_label = tk.Label(root, text=place_name, font=("Arial", 12))
-#     txt_label.pack(pady=2)
-#     # ToDo: match font size, padding window size etc
-
-#     # Set a fixed window size based on the image dimensions
-#     root.geometry(f"{img.width()}x{img.height()+37}")
-
-#     # Run the Tkinter event loop
-#     root.mainloop()
 
 
 def borderless(image_path, place_name):
@@ -158,7 +123,7 @@ def borderless(image_path, place_name):
     window.mainloop()
 
 def main():
-    # ToDo: Credit OpenStreetMap, implement caching and move tempfile
+    # ToDo: Credit OpenStreetMap
     if len(sys.argv) < 2:
         print("Usage: python script.py <file_path>")
         sys.exit(1)
@@ -167,8 +132,6 @@ def main():
     coords = get_coordinates(file_path)
     png_path = print_image(coords[0], coords[1], 6)
     name = get_name_from_coordinates(coords[0], coords[1])
-    # run_main_window(name)
-    # create_image_panel(map_path, name)
     borderless(png_path, name)
     
 
