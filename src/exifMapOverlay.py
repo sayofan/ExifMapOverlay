@@ -55,17 +55,38 @@ def get_name_from_coordinates(lat, lon) -> str:
     except KeyError:
         return nomQuery.address()['city']
     # ToDo: parse some more info and handle more fields, like country, town, neighourhood
+    # ToDo: query existence of different fields and display accordung to that
+
+class FloatingWindow(tk.Toplevel):
+    # https://stackoverflow.com/questions/4055267/tkinter-mouse-drag-a-window-without-borders-eg-overridedirect1#
+    def __init__(self, *args, **kwargs):
+        tk.Toplevel.__init__(self, *args, **kwargs)
+        self.overrideredirect(True)
+
+    def start_move(self, event):
+        self.x = event.x
+        self.y = event.y
+
+    def stop_move(self, event):
+        self.x = None
+        self.y = None
+
+    def do_move(self, event):
+        deltax = event.x - self.x
+        deltay = event.y - self.y
+        x = self.winfo_x() + deltax
+        y = self.winfo_y() + deltay
+        self.geometry(f"+{x}+{y}")
 
 
 def borderless(image_path, place_name):
     root = tk.Tk()
     root.attributes('-alpha', 0.0) #For icon
     root.iconify()
-    window = tk.Toplevel(root)
+    window = FloatingWindow(root)
     window.attributes("-topmost", True)
-    # window.after(10000, lambda: root.destroy())  # autoclose after 10s #ToDo: add (small) timerbar
-    # ToDo: make windiw draggable, save position in inifile
-    # ToDo: add osm credits below image
+    # ToDo: save position of window in inifile
+    # ToDo: make osm credits below image nicer
     # toDo: possibly add small worldmap in corner (separate panel in front of normal map)
 
         # Load the image
@@ -96,20 +117,23 @@ def borderless(image_path, place_name):
     #####
 
     # Create a label to display the image
-    label = tk.Label(window, image=img)
+    label = tk.Label(window, text='© OpenStreetMap', image=img, compound='top', justify='left', font=("TkDefaultFont", 8))
     label.pack()
     frame.pack(expand=True, fill='none')
     # add second label with text
-    txt_label = tk.Label(window, text=place_name, font=("Arial", 12))
+    txt_label = tk.Label(window, text=place_name, font=("TkDefaultFont", 12))
     txt_label.pack(pady=2)
     # ToDo: match font size, padding window size etc
 
     pos_x = 200
     pos_y = 100
-    window.geometry(f"{img.width()}x{img.height()+37}+{pos_x}+{pos_y}")
-    # window.geometry(f"{img.width()}x{img.height()+37}")
-    window.overrideredirect(1) #Remove border - do not use overrideredirect directly on root as it will remove taskbar icon as well 
-    # window.after(10000, lambda: root.destroy())  # autoclose after 10s #ToDo: add (small) timerbar
+    window.geometry(f"{img.width()}x{img.height()+37+10}+{pos_x}+{pos_y}")
+    window.overrideredirect(True) #Remove border - do not use overrideredirect directly on root as it will remove taskbar icon as well 
+
+    label.bind("<ButtonPress-1>", window.start_move)
+    label.bind("<ButtonRelease-1>", window.stop_move)
+    label.bind("<B1-Motion>", window.do_move)
+
     total_time = 8000  # in ms - the actual time will probably be a bit longer than that due to overhead in functioncalls
     delay_ms = 50 # increasing this / reducing fps should probably decrease overhead
     step = 100 / (total_time/delay_ms)
@@ -123,7 +147,6 @@ def borderless(image_path, place_name):
     window.mainloop()
 
 def main():
-    # ToDo: Credit OpenStreetMap
     if len(sys.argv) < 2:
         print("Usage: python script.py <file_path>")
         sys.exit(1)

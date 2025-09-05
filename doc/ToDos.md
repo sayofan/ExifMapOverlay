@@ -1,4 +1,3 @@
-- Credit OpenStreetMap
 - Pfeiltasten links rechts evtl. zum Spulen des Timers verwenden.
-- male entire window mouse draggable
 - save position in ini file
+- ortsnamen aus Nomatim besser auswerten: (falls vorhanden) hamlet oder village, zusätzlich (falls vorhanden) town oder city ; zusätzlich country; suburb nicht
