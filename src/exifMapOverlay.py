@@ -13,6 +13,8 @@ from tkinter import PhotoImage
 import os
 import sys
 
+AppName = 'ExifMapOverlay'
+
 def get_coordinates(filename):
     # ToDp: handle missing file and missing exif data
     image = Image.open(filename)
@@ -39,14 +41,14 @@ def print_image(lat: float, lon: float, zoom_factor: int) -> str:
     return file_path
 
 def get_temp_map_name(lat, lon, zoom_factor):
-    temp_dir = os.path.join(tempfile.gettempdir(), 'ExifMapper')
+    temp_dir = os.path.join(tempfile.gettempdir(), AppName)
     file_name = f"{lat:.7f}_{lon:.7f}_zoom{zoom_factor}.png"  # 7 decimaly ~ 0.1m
     file_path = os.path.join(temp_dir, file_name)
     return file_path
     
 
 def get_name_from_coordinates(lat, lon) -> str:
-    temp_dir = os.path.join(tempfile.gettempdir(), 'ExifMapper')
+    temp_dir = os.path.join(tempfile.gettempdir(), AppName)
     CachingStrategy.use(JSON, cacheDir=temp_dir)
     nominatim = Nominatim()
     nomQuery = nominatim.query(lat, lon, reverse=True)
@@ -159,7 +161,7 @@ def borderless(image_path, place_name):
     label.bind("<ButtonRelease-1>", window.stop_move)
     label.bind("<B1-Motion>", window.do_move)
 
-    total_time = 8000  # in ms - the actual time will probably be a bit longer than that due to overhead in functioncalls
+    total_time = 6000  # in ms - the actual time will probably be a bit longer than that due to overhead in functioncalls
     delay_ms = 50 # increasing this / reducing fps should probably decrease overhead
     step = 100 / (total_time/delay_ms)
     def animate_progressbar():
