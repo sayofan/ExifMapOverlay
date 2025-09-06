@@ -14,6 +14,7 @@ import os
 import sys
 
 AppName = 'ExifMapOverlay'
+result_language = 'de-DE'
 
 def get_coordinates(filename):
     # ToDp: handle missing file and missing exif data
@@ -35,7 +36,9 @@ def print_image(lat: float, lon: float, zoom_factor: int) -> str:
     if not os.access(os.path.join(tempfile.gettempdir(), AppName), os.R_OK):
         os.mkdir(os.path.join(tempfile.gettempdir(), AppName))
     if not os.access(file_path, os.R_OK):
-        m = StaticMap(200, 200, url_template='http://a.tile.osm.org/{z}/{x}/{y}.png')
+        native_tiles_url = 'http://a.tile.osm.org/{z}/{x}/{y}.png'
+        german_tiles_url = 'https://tile.openstreetmap.de/{z}/{x}/{y}.png'  # for a list, see https://wiki.openstreetmap.org/wiki/Raster_tile_providers
+        m = StaticMap(200, 200, url_template=german_tiles_url)
         marker = CircleMarker((lon, lat), "#0037FFFF", 12)
         m.add_marker(marker)
         image = m.render(zoom=zoom_factor)
@@ -53,7 +56,7 @@ def get_name_from_coordinates(lat, lon) -> str:
     temp_dir = os.path.join(tempfile.gettempdir(), AppName)
     CachingStrategy.use(JSON, cacheDir=temp_dir)
     nominatim = Nominatim()
-    nomQuery = nominatim.query(lat, lon, reverse=True)
+    nomQuery = nominatim.query(lat, lon, reverse=True, params={'accept-language': result_language})
     hamlet = ""
     village = ""
     town = ""
