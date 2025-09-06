@@ -47,7 +47,7 @@ def print_image(lat: float, lon: float, zoom_factor: int) -> str:
 
 def get_temp_map_name(lat, lon, zoom_factor):
     temp_dir = os.path.join(tempfile.gettempdir(), AppName)
-    file_name = f"{lat:.7f}_{lon:.7f}_zoom{zoom_factor}.png"  # 7 decimaly ~ 0.1m
+    file_name = f"{lat:.6f}_{lon:.6f}_zoom{zoom_factor}.png"  # 6 decimally ~ 0.1m
     file_path = os.path.join(temp_dir, file_name)
     return file_path
     
