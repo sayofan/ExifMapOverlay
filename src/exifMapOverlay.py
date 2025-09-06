@@ -32,6 +32,8 @@ def get_coordinates(filename):
 
 def print_image(lat: float, lon: float, zoom_factor: int) -> str:
     file_path = get_temp_map_name(lat, lon, zoom_factor)
+    if not os.access(os.path.join(tempfile.gettempdir(), AppName), os.R_OK):
+        os.mkdir(os.path.join(tempfile.gettempdir(), AppName))
     if not os.access(file_path, os.R_OK):
         m = StaticMap(200, 200, url_template='http://a.tile.osm.org/{z}/{x}/{y}.png')
         marker = CircleMarker((lon, lat), "#0037FFFF", 12)
