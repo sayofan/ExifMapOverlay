@@ -50,10 +50,34 @@ def get_name_from_coordinates(lat, lon) -> str:
     CachingStrategy.use(JSON, cacheDir=temp_dir)
     nominatim = Nominatim()
     nomQuery = nominatim.query(lat, lon, reverse=True)
+    hamlet = ""
+    village = ""
+    town = ""
+    city = ""
+    country = ""
     try:
-        return nomQuery.address()['village']
+        hamlet = nomQuery.address()['hamlet']
     except KeyError:
-        return nomQuery.address()['city']
+        pass
+    try:
+        village = nomQuery.address()['village']
+    except KeyError:
+        pass
+    try:
+        town = nomQuery.address()['town']
+    except KeyError:
+        pass
+    try:
+        city = nomQuery.address()['city']
+    except KeyError:
+        pass
+    try:
+        country = nomQuery.address()['country']
+    except KeyError:
+        pass
+    city_or_town = city if city!="" else town  # town may be empty still
+    village_or_hamlet = village if village!="" else hamlet  # hamlet may be empty still
+    return village_or_hamlet + " " + city_or_town + "\n" + country  # ToDo: make some distinctions on what to display - show country below
     # ToDo: parse some more info and handle more fields, like country, town, neighourhood
     # ToDo: query existence of different fields and display accordung to that
 
@@ -123,11 +147,12 @@ def borderless(image_path, place_name):
     # add second label with text
     txt_label = tk.Label(window, text=place_name, font=("TkDefaultFont", 12))
     txt_label.pack(pady=2)
+    txt_label.config(wraplength=img.height())
     # ToDo: match font size, padding window size etc
 
     pos_x = 200
     pos_y = 100
-    window.geometry(f"{img.width()}x{img.height()+37+10}+{pos_x}+{pos_y}")
+    window.geometry(f"{img.width()}x{img.height()+2*34+10}+{pos_x}+{pos_y}")
     window.overrideredirect(True) #Remove border - do not use overrideredirect directly on root as it will remove taskbar icon as well 
 
     label.bind("<ButtonPress-1>", window.start_move)
