@@ -1,5 +1,6 @@
 #!"D:/Conda/envs/osm/python.exe"
 
+import json
 from tkinter import ttk
 from PIL import Image
 from PIL.ExifTags import TAGS
@@ -15,6 +16,44 @@ import sys
 
 AppName = 'ExifMapOverlay'
 result_language = 'de-DE'
+
+class EmoSettings():
+    """
+    Settings to dump into and read from a text config file.
+    """
+    def __init__(self) -> None:
+        # defaults
+        self.data = {
+            'window_pos_x': 200,
+            'window_pos_y': 100,
+            'nomatim_language': 'de-DE',
+            'tile_server_url_template': 'https://tile.openstreetmap.de/{z}/{x}/{y}.png',
+            'map_zoom_level': 6,
+            'map_pixel_size_x': 200,
+            'map_pixel_size_y': 200,
+            'place_text_font_size': 12,
+        }
+        self.read_from_file()
+        pass
+
+    def dump_to_file(self):
+        with open(self.get_settings_path(), 'w') as f:
+            json.dump(self.data, f)
+
+    def read_from_file(self):
+        try:
+            with open(self.get_settings_path(), 'r') as f:
+                self.data = json.load(f)
+        except (FileNotFoundError, AttributeError, json.JSONDecodeError):
+            # dump defaults if file does not exist or error occured
+            with open(self.get_settings_path(), 'w') as f:
+                json.dump(self.data, f)
+            pass
+    
+    def get_settings_path(self) -> str:
+        return os.path.join(tempfile.gettempdir(), AppName, 'emo_settings.json')
+    
+
 
 def get_coordinates(filename):
     # ToDp: handle missing file and missing exif data
@@ -108,11 +147,15 @@ class FloatingWindow(tk.Toplevel):
         x = self.winfo_x() + deltax
         y = self.winfo_y() + deltay
         self.geometry(f"+{x}+{y}")
+        settings = EmoSettings()
+        settings.data['window_pos_x'] = x
+        settings.data['window_pos_y'] = y
+        settings.dump_to_file()
 
 
 def borderless(image_path, place_name):
     root = tk.Tk()
-    root.attributes('-alpha', 0.0) #For icon
+    root.iconbitmap(os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "scratch", "logo.ico"))
     root.iconify()
     window = FloatingWindow(root)
     window.attributes("-topmost", True)
@@ -157,8 +200,9 @@ def borderless(image_path, place_name):
     txt_label.config(wraplength=img.height())
     # ToDo: match font size, padding window size etc
 
-    pos_x = 200
-    pos_y = 100
+    settings = EmoSettings()
+    pos_x = settings.data['window_pos_x']
+    pos_y = settings.data['window_pos_y']
     window.geometry(f"{img.width()}x{img.height()+2*34+10}+{pos_x}+{pos_y}")
     window.overrideredirect(True) #Remove border - do not use overrideredirect directly on root as it will remove taskbar icon as well 
 
@@ -184,9 +228,10 @@ def main():
         sys.exit(1)
     
     file_path = sys.argv[1]
+    # settings = EmoSettings()
     coords = get_coordinates(file_path)
-    png_path = print_image(coords[0], coords[1], 6)
-    name = get_name_from_coordinates(coords[0], coords[1])
+    png_path = print_image(coords[0], coords[1], 6) # ToDo: incorporate settings
+    name = get_name_from_coordinates(coords[0], coords[1]) # ToDo: incorporate settings
     borderless(png_path, name)
     
 
