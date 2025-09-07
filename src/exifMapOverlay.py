@@ -155,7 +155,10 @@ class FloatingWindow(tk.Toplevel):
 
 def borderless(image_path, place_name):
     root = tk.Tk()
-    root.iconbitmap(os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "scratch", "logo.ico"))
+    try:
+        root.iconbitmap(os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "scratch", "logo.ico"))
+    except:
+        pass
     root.iconify()
     window = FloatingWindow(root)
     window.attributes("-topmost", True)
