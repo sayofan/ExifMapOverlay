@@ -59,7 +59,7 @@ def get_coordinates(filename):
     # ToDp: handle missing file and missing exif data
     image = Image.open(filename)
     exifdict = image._getexif()
-    gps_dict = exifdict[34853]
+    gps_dict = exifdict[34853]  # ToDo: propagate a KeyError upstream and close program, maybe display message (for a very short time)
     lat_sign = gps_dict[1]
     lat = gps_dict[2][0] + 1/60. * gps_dict[2][1] + 1/3600. * gps_dict[2][2]
     lon_sign = gps_dict[3]
@@ -77,7 +77,7 @@ def print_image(lat: float, lon: float, zoom_factor: int) -> str:
     if not os.access(file_path, os.R_OK):
         native_tiles_url = 'http://a.tile.osm.org/{z}/{x}/{y}.png'
         german_tiles_url = 'https://tile.openstreetmap.de/{z}/{x}/{y}.png'  # for a list, see https://wiki.openstreetmap.org/wiki/Raster_tile_providers
-        m = StaticMap(200, 200, url_template=german_tiles_url)
+        m = StaticMap(200, 200, url_template=german_tiles_url, delay_between_retries=1)
         marker = CircleMarker((lon, lat), "#0037FFFF", 12)
         m.add_marker(marker)
         image = m.render(zoom=zoom_factor)
