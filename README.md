@@ -26,15 +26,15 @@ A settings file with default values will be created the first time the tool is e
 The contents of the settings file are 
 ```jsonc
 {
-    'window_pos_x': 200,
-    'window_pos_y': 100,
-    'nomatim_language': 'de-DE',
-    'tile_server_url_template': 'https://tile.openstreetmap.de/{z}/{x}/{y}.png',
-    'map_zoom_level': 6,
-    'map_pixel_size_x': 200,
-    'map_pixel_size_y': 200,
-    'place_text_font_size': 12,
-    'approx_display_time_ms': 6000
+    "window_pos_x": 200,
+    "window_pos_y": 100,
+    "nomatim_language": "de-DE",
+    "tile_server_url_template": "https://tile.openstreetmap.de/{z}/{x}/{y}.png",
+    "map_zoom_level": 6,
+    "map_pixel_size_x": 200,
+    "map_pixel_size_y": 200,
+    "place_text_font_size": 12,
+    "approx_display_time_ms": 6000
 }
 ```
 
