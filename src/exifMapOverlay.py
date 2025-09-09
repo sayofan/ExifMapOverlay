@@ -32,6 +32,7 @@ class EmoSettings():
             'map_pixel_size_x': 200,
             'map_pixel_size_y': 200,
             'place_text_font_size': 12,
+            'approx_display_time_ms': 6000,
         }
         self.read_from_file()
         pass
@@ -213,7 +214,7 @@ def borderless(image_path, place_name):
     label.bind("<ButtonRelease-1>", window.stop_move)
     label.bind("<B1-Motion>", window.do_move)
 
-    total_time = 6000  # in ms - the actual time will probably be a bit longer than that due to overhead in functioncalls
+    total_time = settings.data['approx_display_time_ms']  # in ms - the actual time will probably be a bit longer than that due to overhead in functioncalls
     delay_ms = 50 # increasing this / reducing fps should probably decrease overhead
     step = 100 / (total_time/delay_ms)
     def animate_progressbar():
