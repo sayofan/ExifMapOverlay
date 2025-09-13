@@ -28,7 +28,7 @@ The contents of the settings file are
 {
     "window_pos_x": 200,
     "window_pos_y": 100,
-    "nomatim_language": "de-DE",
+    "nominatim_language": "de-DE",
     "tile_server_url_template": "https://tile.openstreetmap.de/{z}/{x}/{y}.png",
     "map_zoom_level": 6,
     "map_pixel_size_x": 200,

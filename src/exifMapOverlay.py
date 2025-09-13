@@ -25,7 +25,7 @@ class EmoSettings():
         self.data = {
             'window_pos_x': 200,
             'window_pos_y': 100,
-            'nomatim_language': 'de-DE',
+            'nominatim_language': 'de-DE',
             'tile_server_url_template': 'https://tile.openstreetmap.de/{z}/{x}/{y}.png',  # native='http://tile.osm.org/{z}/{x}/{y}.png' - for a list, see https://wiki.openstreetmap.org/wiki/Raster_tile_providers
             'map_zoom_level': 6,
             'map_pixel_size_x': 200,
@@ -164,11 +164,9 @@ def borderless(image_path, place_name, font_size):
     root.iconify()
     window = FloatingWindow(root)
     window.attributes("-topmost", True)
-    # ToDo: save position of window in inifile
-    # ToDo: make osm credits below image nicer
     # toDo: possibly add small worldmap in corner (separate panel in front of normal map)
 
-        # Load the image
+    # Load the image
     if not os.path.exists(image_path):
         print(f"Error: File '{image_path}' not found.")
         return
@@ -243,7 +241,7 @@ def main():
                            settings.data['tile_server_url_template']
                            )
     name = get_name_from_coordinates(coords[0], coords[1], 
-                                     settings.data['nomatim_language'])
+                                     settings.data['nominatim_language'])
     borderless(png_path, name, settings.data['place_text_font_size'])
     
 
