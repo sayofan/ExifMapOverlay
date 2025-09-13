@@ -4,7 +4,7 @@ import json
 from tkinter import ttk
 from PIL import Image
 from PIL.ExifTags import TAGS
-from staticmap import StaticMap, CircleMarker
+from staticmap_cache import StaticMap, CircleMarker
 from OSMPythonTools.nominatim import Nominatim
 from OSMPythonTools.cachingStrategy import CachingStrategy, JSON
 import tempfile
@@ -78,7 +78,7 @@ def print_image(lat: float, lon: float, zoom_factor: int) -> str:
     if not os.access(file_path, os.R_OK):
         native_tiles_url = 'http://a.tile.osm.org/{z}/{x}/{y}.png'
         german_tiles_url = 'https://tile.openstreetmap.de/{z}/{x}/{y}.png'  # for a list, see https://wiki.openstreetmap.org/wiki/Raster_tile_providers
-        m = StaticMap(200, 200, url_template=german_tiles_url, delay_between_retries=1)
+        m = StaticMap(200, 200, url_template=german_tiles_url, delay_between_retries=1, cache_dir=os.path.join(tempfile.gettempdir(), AppName))
         marker = CircleMarker((lon, lat), "#0037FFFF", 12)
         m.add_marker(marker)
         image = m.render(zoom=zoom_factor)

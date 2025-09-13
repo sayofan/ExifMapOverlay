@@ -2,3 +2,4 @@ build
 dist
 exifMapOverlay.spec
 scratch
+*/__pycache__
