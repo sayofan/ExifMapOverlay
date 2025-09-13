@@ -25,8 +25,8 @@ class EmoSettings():
         self.data = {
             'window_pos_x': 200,
             'window_pos_y': 100,
-            'nominatim_language': 'de-DE',
-            'tile_server_url_template': 'https://tile.openstreetmap.de/{z}/{x}/{y}.png',  # native='http://tile.osm.org/{z}/{x}/{y}.png' - for a list, see https://wiki.openstreetmap.org/wiki/Raster_tile_providers
+            'nominatim_language': None,  # german: 'de-DE'
+            'tile_server_url_template': 'http://tile.osm.org/{z}/{x}/{y}.png',  # german: 'https://tile.openstreetmap.de/{z}/{x}/{y}.png' - for a list, see https://wiki.openstreetmap.org/wiki/Raster_tile_providers
             'map_zoom_level': 6,
             'map_pixel_size_x': 200,
             'map_pixel_size_y': 200,
@@ -93,7 +93,7 @@ def get_temp_map_name(lat, lon, zoom_factor:int, width: int, height: int):
     return file_path
     
 
-def get_name_from_coordinates(lat: float, lon: float, result_language: str) -> str:
+def get_name_from_coordinates(lat: float, lon: float, result_language: str | None) -> str:
     temp_dir = os.path.join(tempfile.gettempdir(), AppName)
     CachingStrategy.use(JSON, cacheDir=temp_dir)
     nominatim = Nominatim()
