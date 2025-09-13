@@ -78,7 +78,7 @@ def print_image(lat: float, lon: float, zoom_factor: int) -> str:
     if not os.access(file_path, os.R_OK):
         native_tiles_url = 'http://a.tile.osm.org/{z}/{x}/{y}.png'
         german_tiles_url = 'https://tile.openstreetmap.de/{z}/{x}/{y}.png'  # for a list, see https://wiki.openstreetmap.org/wiki/Raster_tile_providers
-        m = StaticMap(200, 200, url_template=german_tiles_url, delay_between_retries=1, cache_dir=os.path.join(tempfile.gettempdir(), AppName))
+        m = StaticMap(200, 200, url_template=german_tiles_url, delay_between_retries=1, cache_dir=os.path.join(tempfile.gettempdir(), AppName, 'tiles'))
         marker = CircleMarker((lon, lat), "#0037FFFF", 12)
         m.add_marker(marker)
         image = m.render(zoom=zoom_factor)

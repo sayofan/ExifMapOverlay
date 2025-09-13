@@ -457,7 +457,7 @@ class StaticMap:
             try:
                 # read in cached file
                 with open(tile_cache_name, "rb") as f:
-                    cached_tile = BytesIO(f.read())
+                    cached_tile = f.read()
                 return requests.codes.OK, cached_tile
             except:
                 res = requests.get(url, **kwargs)
