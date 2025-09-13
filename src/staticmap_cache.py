@@ -461,9 +461,9 @@ class StaticMap:
                 return requests.codes.OK, cached_tile
             except:
                 res = requests.get(url, **kwargs)
-                # ToDo: possibly check response before trying to write
-                with open(tile_cache_name, 'wb') as f:
-                    f.write(res.content)
+                if (requests.codes.OK == res.status_code):
+                    with open(tile_cache_name, 'wb') as f:
+                        f.write(res.content)
                 return res.status_code, res.content
         else:
             res = requests.get(url, **kwargs)

@@ -1,3 +1,2 @@
 - Pfeiltasten links rechts evtl. zum Spulen des Timers verwenden.
-- save position in ini file
-- ortsnamen aus Nomatim besser auswerten: (falls vorhanden) hamlet oder village, zusätzlich (falls vorhanden) town oder city ; zusätzlich country; suburb nicht
+- take Fontsize from settings file. label height should probably be 3*fontsize+1
