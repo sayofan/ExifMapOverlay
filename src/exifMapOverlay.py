@@ -15,7 +15,6 @@ import os
 import sys
 
 AppName = 'ExifMapOverlay'
-result_language = 'de-DE'
 
 class EmoSettings():
     """
@@ -27,7 +26,7 @@ class EmoSettings():
             'window_pos_x': 200,
             'window_pos_y': 100,
             'nomatim_language': 'de-DE',
-            'tile_server_url_template': 'https://tile.openstreetmap.de/{z}/{x}/{y}.png',
+            'tile_server_url_template': 'https://tile.openstreetmap.de/{z}/{x}/{y}.png',  # native='http://tile.osm.org/{z}/{x}/{y}.png' - for a list, see https://wiki.openstreetmap.org/wiki/Raster_tile_providers
             'map_zoom_level': 6,
             'map_pixel_size_x': 200,
             'map_pixel_size_y': 200,
@@ -71,28 +70,30 @@ def get_coordinates(filename):
         lon = -lon
     return (lat, lon)
 
-def print_image(lat: float, lon: float, zoom_factor: int) -> str:
-    file_path = get_temp_map_name(lat, lon, zoom_factor)
+def print_image(lat: float, lon: float, zoom_factor: int, width: int, height: int, url_template: str) -> str:
+    """
+    Create a static map with circle marker at the given location. File will be saved to disk and file path returned.
+    If cached file with that name is already present on disk, use that file.
+    """
+    file_path = get_temp_map_name(lat, lon, zoom_factor, width, height)
     if not os.access(os.path.join(tempfile.gettempdir(), AppName), os.R_OK):
         os.mkdir(os.path.join(tempfile.gettempdir(), AppName))
     if not os.access(file_path, os.R_OK):
-        native_tiles_url = 'http://a.tile.osm.org/{z}/{x}/{y}.png'
-        german_tiles_url = 'https://tile.openstreetmap.de/{z}/{x}/{y}.png'  # for a list, see https://wiki.openstreetmap.org/wiki/Raster_tile_providers
-        m = StaticMap(200, 200, url_template=german_tiles_url, delay_between_retries=1, cache_dir=os.path.join(tempfile.gettempdir(), AppName, 'tiles'))
+        m = StaticMap(width, height, url_template=url_template, delay_between_retries=1, cache_dir=os.path.join(tempfile.gettempdir(), AppName, 'tiles'))
         marker = CircleMarker((lon, lat), "#0037FFFF", 12)
         m.add_marker(marker)
         image = m.render(zoom=zoom_factor)
         image.save(file_path)
     return file_path
 
-def get_temp_map_name(lat, lon, zoom_factor):
+def get_temp_map_name(lat, lon, zoom_factor:int, width: int, height: int):
     temp_dir = os.path.join(tempfile.gettempdir(), AppName)
-    file_name = f"{lat:.6f}_{lon:.6f}_zoom{zoom_factor}.png"  # 6 decimally ~ 0.1m
+    file_name = f"{lat:.6f}_{lon:.6f}_zoom{zoom_factor}_w{width}_h{height}.png"  # 6 decimally ~ 0.1m
     file_path = os.path.join(temp_dir, file_name)
     return file_path
     
 
-def get_name_from_coordinates(lat, lon) -> str:
+def get_name_from_coordinates(lat: float, lon: float, result_language: str) -> str:
     temp_dir = os.path.join(tempfile.gettempdir(), AppName)
     CachingStrategy.use(JSON, cacheDir=temp_dir)
     nominatim = Nominatim()
@@ -154,7 +155,7 @@ class FloatingWindow(tk.Toplevel):
         settings.dump_to_file()
 
 
-def borderless(image_path, place_name):
+def borderless(image_path, place_name, font_size):
     root = tk.Tk()
     try:
         root.iconbitmap(os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "scratch", "logo.ico"))
@@ -199,7 +200,7 @@ def borderless(image_path, place_name):
     label.pack()
     frame.pack(expand=True, fill='none')
     # add second label with text
-    txt_label = tk.Label(window, text=place_name, font=("TkDefaultFont", 12))
+    txt_label = tk.Label(window, text=place_name, font=("TkDefaultFont", font_size))
     txt_label.pack(pady=2)
     txt_label.config(wraplength=img.height())
     # ToDo: match font size, padding window size etc
@@ -207,7 +208,8 @@ def borderless(image_path, place_name):
     settings = EmoSettings()
     pos_x = settings.data['window_pos_x']
     pos_y = settings.data['window_pos_y']
-    window.geometry(f"{img.width()}x{img.height()+2*34+10}+{pos_x}+{pos_y}")
+    _height = img.height() + 5*font_size + 8 + 10
+    window.geometry(f"{img.width()}x{_height}+{pos_x}+{pos_y}")
     window.overrideredirect(True) #Remove border - do not use overrideredirect directly on root as it will remove taskbar icon as well 
 
     label.bind("<ButtonPress-1>", window.start_move)
@@ -232,11 +234,17 @@ def main():
         sys.exit(1)
     
     file_path = sys.argv[1]
-    # settings = EmoSettings()
+    settings = EmoSettings()
     coords = get_coordinates(file_path)
-    png_path = print_image(coords[0], coords[1], 6) # ToDo: incorporate settings
-    name = get_name_from_coordinates(coords[0], coords[1]) # ToDo: incorporate settings
-    borderless(png_path, name)
+    png_path = print_image(coords[0], coords[1], 
+                           settings.data['map_zoom_level'],
+                           settings.data['map_pixel_size_x'],
+                           settings.data['map_pixel_size_y'],
+                           settings.data['tile_server_url_template']
+                           )
+    name = get_name_from_coordinates(coords[0], coords[1], 
+                                     settings.data['nomatim_language'])
+    borderless(png_path, name, settings.data['place_text_font_size'])
     
 
 if __name__ == "__main__":
