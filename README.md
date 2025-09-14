@@ -1,4 +1,4 @@
-# ExifMapOverlay
+# ExifMapOverlay <img align="right" width="40" height="40" src="logo/logo_emo.ico">
 The purpose of this tool is to show a simple small map overlay when viewing photos.
 Intended as a nice gimmick when reviewing vacation photos.
 If a jpeg contains GeoLocation Data, fetch a map and place name from OpenStreetMap and display a small window always on top for a few seconds, then autoclose the map again.

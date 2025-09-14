@@ -1,2 +1,2 @@
 - Pfeiltasten links rechts evtl. zum Spulen des Timers verwenden.
-- take Fontsize from settings file. label height should probably be 3*fontsize+1
+- catch errors when trying to read coordinates (fileNotFound, KeyError when ExifTag is missing, etc.) and display app for a short time with error message

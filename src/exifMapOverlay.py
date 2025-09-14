@@ -160,7 +160,7 @@ class FloatingWindow(tk.Toplevel):
 def borderless(image_path, place_name, font_size):
     root = tk.Tk()
     try:
-        root.iconbitmap(os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "scratch", "logo.ico"))
+        root.iconbitmap(os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "logo_emo.ico"))
     except:
         pass
     root.iconify()
