@@ -30,6 +30,7 @@ The contents of the settings file are
     "window_pos_y": 100,
     "nominatim_language": null,  // null for native names; otherwise a http Accept-Language header (e.g. 'de-DE')
     "tile_server_url_template": "https://tile.osm.org/{z}/{x}/{y}.png",  // # OSM tile server. For a list, see https://wiki.openstreetmap.org/wiki/Raster_tile_providers
+    "tile_size_px": 256,  // the side length of the tiles. must be matched to the server. usually 256 or 512.
     "map_zoom_level": 6,  // tile zoom level, see https://wiki.openstreetmap.org/wiki/Zoom_levels
     "map_pixel_size_x": 200,
     "map_pixel_size_y": 200,

@@ -27,6 +27,7 @@ class EmoSettings():
             'window_pos_y': 100,
             'nominatim_language': None,  # german: 'de-DE'
             'tile_server_url_template': 'http://tile.osm.org/{z}/{x}/{y}.png',  # german: 'https://tile.openstreetmap.de/{z}/{x}/{y}.png' - for a list, see https://wiki.openstreetmap.org/wiki/Raster_tile_providers
+            'tile_size_px': 256,
             'map_zoom_level': 6,
             'map_pixel_size_x': 200,
             'map_pixel_size_y': 200,
@@ -70,7 +71,7 @@ def get_coordinates(filename):
         lon = -lon
     return (lat, lon)
 
-def print_image(lat: float, lon: float, zoom_factor: int, width: int, height: int, url_template: str) -> str:
+def print_image(lat: float, lon: float, zoom_factor: int, width: int, height: int, url_template: str, tile_size: int) -> str:
     """
     Create a static map with circle marker at the given location. File will be saved to disk and file path returned.
     If cached file with that name is already present on disk, use that file.
@@ -79,7 +80,8 @@ def print_image(lat: float, lon: float, zoom_factor: int, width: int, height: in
     if not os.access(os.path.join(tempfile.gettempdir(), AppName), os.R_OK):
         os.mkdir(os.path.join(tempfile.gettempdir(), AppName))
     if not os.access(file_path, os.R_OK):
-        m = StaticMap(width, height, url_template=url_template, delay_between_retries=1, cache_dir=os.path.join(tempfile.gettempdir(), AppName, 'tiles'))
+        m = StaticMap(width, height, url_template=url_template, tile_size=tile_size, delay_between_retries=1, 
+                      cache_dir=os.path.join(tempfile.gettempdir(), AppName, 'tiles'))
         marker = CircleMarker((lon, lat), "#0037FFFF", 12)
         m.add_marker(marker)
         image = m.render(zoom=zoom_factor)
@@ -238,7 +240,8 @@ def main():
                            settings.data['map_zoom_level'],
                            settings.data['map_pixel_size_x'],
                            settings.data['map_pixel_size_y'],
-                           settings.data['tile_server_url_template']
+                           settings.data['tile_server_url_template'],
+                           settings.data['tile_size_px']
                            )
     name = get_name_from_coordinates(coords[0], coords[1], 
                                      settings.data['nominatim_language'])
