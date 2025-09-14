@@ -28,9 +28,9 @@ The contents of the settings file are
 {
     "window_pos_x": 200,
     "window_pos_y": 100,
-    "nominatim_language": null,
-    "tile_server_url_template": "https://tile.osm.org/{z}/{x}/{y}.png",
-    "map_zoom_level": 6,
+    "nominatim_language": null,  // null for native names; otherwise a http Accept-Language header (e.g. 'de-DE')
+    "tile_server_url_template": "https://tile.osm.org/{z}/{x}/{y}.png",  // # OSM tile server. For a list, see https://wiki.openstreetmap.org/wiki/Raster_tile_providers
+    "map_zoom_level": 6,  // tile zoom level, see https://wiki.openstreetmap.org/wiki/Zoom_levels
     "map_pixel_size_x": 200,
     "map_pixel_size_y": 200,
     "place_text_font_size": 12,
@@ -41,3 +41,5 @@ The contents of the settings file are
 ## Remarks
 This uses OSMPythonTools to access Nomatim and StaticMap to access map tiles from OpenStreetMap.
 Downloaded data is cached as required by OSM when using their APIs. StaticMap was slightly modified to allow for caching. I do not set an expiration date for the cache, it is simply stored in the system's tempfolder.
+
+Please respect the usage policies of any tile server you use.
