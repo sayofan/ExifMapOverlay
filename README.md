@@ -21,8 +21,7 @@ To package into an executable file, I use PyInstaller with
 `python -m PyInstaller .\src\exifMapOverlay.py --onedir --noconsole --icon .\scratch\logo.ico`
 
 ## Settings
-I plan to include a few settings in an ini file. Currently, the settings file is kept in a tempfolder and only some of its settings are actually read.
-A settings file with default values will be created the first time the tool is executed. 
+There are a few simple settings like position of the window which are kept in a .json file. The file is stored in the temp folder and will be created upon the first execution of ExifMapOverlay with default parameters.
 The contents of the settings file are 
 ```jsonc
 {
@@ -40,7 +39,7 @@ The contents of the settings file are
 ```
 
 ## Remarks
-This uses OSMPythonTools to access Nomatim and StaticMap to access map tiles from OpenStreetMap.
+This uses OSMPythonTools to access Nominatim and StaticMap to access map tiles from OpenStreetMap.
 Downloaded data is cached as required by OSM when using their APIs. StaticMap was slightly modified to allow for caching. I do not set an expiration date for the cache, it is simply stored in the system's tempfolder.
 
 Please respect the usage policies of any tile server you use.
