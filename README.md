@@ -18,7 +18,7 @@ If you are using IrfanView (such as myself), you can simply set up ExifMapOverla
 This project uses a slightly modified [Static Map](https://github.com/komoot/staticmap) and [OSMPythonTools](https://github.com/mocnik-science/osm-python-tools). The latter one has quite a few dependecies.
 To package into an executable file, I use PyInstaller with
 
-`python -m PyInstaller .\src\exifMapOverlay.py --onedir --noconsole --icon .\scratch\logo.ico`
+`python -m PyInstaller .\src\exifMapOverlay.py --onedir --noconsole --icon .\logo\logo_emo.ico`
 
 ## Settings
 There are a few simple settings like position of the window which are kept in a .json file. The file is stored in the temp folder and will be created upon the first execution of ExifMapOverlay with default parameters.
