@@ -471,9 +471,11 @@ class StaticMap:
     
     def _get_cache_file_name(self, tile_url: str, cache_dir: str) -> str:
         """
-        return a file name for a tile where all forward slash from the url are replaced with underscores and colons are omitted
+        return a file name for a tile where all forward slash from the url 
+        are replaced with underscores and colons are omitted, 
+        anything after a question mark is also omitted
         """
-        return os.path.join(cache_dir, tile_url.replace(':', '').replace('/', '_'))
+        return os.path.join(cache_dir, tile_url.replace(':', '').replace('/', '_').split('?')[0])
 
     def _draw_features(self, image):
         """
