@@ -453,6 +453,7 @@ class StaticMap:
         returns the status code and content (in bytes) of the requested tile url
         """
         if self.cache_dir:
+            os.makedirs(self.cache_dir, exist_ok=True)
             tile_cache_name = self._get_cache_file_name(url, self.cache_dir)
             try:
                 # read in cached file

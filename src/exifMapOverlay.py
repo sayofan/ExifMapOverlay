@@ -48,7 +48,7 @@ class EmoSettings():
                 self.data = json.load(f)
         except (FileNotFoundError, AttributeError, json.JSONDecodeError):
             # dump defaults if file does not exist or error occured
-            # ToDo: create tempdir if it does not yet exist
+            os.makedirs(os.path.join(tempfile.gettempdir(), AppName), exist_ok=True)
             with open(self.get_settings_path(), 'w') as f:
                 json.dump(self.data, f)
             pass
