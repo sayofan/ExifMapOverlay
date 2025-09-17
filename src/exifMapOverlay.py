@@ -168,7 +168,7 @@ class FloatingWindow(tk.Toplevel):
 def borderless(image_path, place_name, font_size, display_time=None):
     root = tk.Tk()
     try:
-        root.iconbitmap(os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "logo_emo.ico"))
+        root.iconbitmap(os.path.join(os.path.dirname(os.path.realpath(__file__)), "logo_emo.ico"))
     except:
         pass
     root.iconify()
@@ -255,17 +255,17 @@ def main():
         # ToDo: display error message (for a very short time)
     except UnidentifiedImageError:
         # not a jpeg
-        borderless(os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "scratch", "NotFound.png"), 
+        borderless(os.path.join(os.path.dirname(os.path.realpath(__file__)), "NotFound.png"), 
                    "Not a JPEG", settings.data['place_text_font_size'], display_time=1500)
         return
     except TypeError:
         # no exif data found
-        borderless(os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "scratch", "NotFound.png"), 
+        borderless(os.path.join(os.path.dirname(os.path.realpath(__file__)), "NotFound.png"), 
                    "No EXIF", settings.data['place_text_font_size'], display_time=1500)
         return
     except KeyError:
         # no gps coordinates found in exif data
-        borderless(os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "scratch", "NotFound.png"), 
+        borderless(os.path.join(os.path.dirname(os.path.realpath(__file__)), "NotFound.png"), 
                    "No Coordinates", settings.data['place_text_font_size'], display_time=1500)
         return
     png_path = print_image(coords[0], coords[1], 
