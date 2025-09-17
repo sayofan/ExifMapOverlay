@@ -1,2 +1,3 @@
 - Pfeiltasten links rechts evtl. zum Spulen des Timers verwenden.
-- catch errors when trying to read coordinates (fileNotFound, KeyError when ExifTag is missing, etc.) and display app for a short time with error message
+- add version number
+- add version and help argument to CLI

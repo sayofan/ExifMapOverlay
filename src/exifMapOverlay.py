@@ -2,7 +2,7 @@
 
 import json
 from tkinter import ttk
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 from PIL.ExifTags import TAGS
 from staticmap_cache import StaticMap, CircleMarker
 from OSMPythonTools.nominatim import Nominatim
@@ -15,6 +15,7 @@ import os
 import sys
 
 AppName = 'ExifMapOverlay'
+# version_string = '0.1.0'
 
 class EmoSettings():
     """
@@ -57,10 +58,15 @@ class EmoSettings():
 
 
 def get_coordinates(filename):
-    # ToDp: handle missing file and missing exif data
-    image = Image.open(filename)
-    exifdict = image._getexif()
-    gps_dict = exifdict[34853]  # ToDo: propagate a KeyError upstream and close program, maybe display message (for a very short time)
+    """
+    get coordinates from a jpeg file.
+    Raises PIL.UnidentifiedImageError if a file format other than jpeg was encountered (this means TIF and PNG are not supported)
+    Raises TypeError if no exifdata was found and KeyError if no gps coordinates were found in exifdata. 
+    """
+    # ToDo: potentially raise some more verbose exceptions
+    image = Image.open(filename, formats=["JPEG"])
+    exifdict = image._getexif() # type: ignore
+    gps_dict = exifdict[34853]
     lat_sign = gps_dict[1]
     lat = gps_dict[2][0] + 1/60. * gps_dict[2][1] + 1/3600. * gps_dict[2][2]
     lon_sign = gps_dict[3]
@@ -105,6 +111,8 @@ def get_name_from_coordinates(lat: float, lon: float, result_language: str | Non
     town = ""
     city = ""
     country = ""
+    if nomQuery is None:
+        return "ERROR"
     try:
         hamlet = nomQuery.address()['hamlet']
     except KeyError:
@@ -157,7 +165,7 @@ class FloatingWindow(tk.Toplevel):
         settings.dump_to_file()
 
 
-def borderless(image_path, place_name, font_size):
+def borderless(image_path, place_name, font_size, display_time=None):
     root = tk.Tk()
     try:
         root.iconbitmap(os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "logo_emo.ico"))
@@ -216,7 +224,10 @@ def borderless(image_path, place_name, font_size):
     label.bind("<ButtonRelease-1>", window.stop_move)
     label.bind("<B1-Motion>", window.do_move)
 
-    total_time = settings.data['approx_display_time_ms']  # in ms - the actual time will probably be a bit longer than that due to overhead in functioncalls
+    if display_time is None:
+        total_time = settings.data['approx_display_time_ms']  # in ms - the actual time will probably be a bit longer than that due to overhead in functioncalls
+    else:
+        total_time = display_time
     delay_ms = 50 # increasing this / reducing fps should probably decrease overhead
     step = 100 / (total_time/delay_ms)
     def animate_progressbar():
@@ -230,12 +241,33 @@ def borderless(image_path, place_name, font_size):
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python script.py <file_path>")
+        print("Usage: exifMapOverlay.exe <file_path.jpg>")
         sys.exit(1)
+
+    if "--help"==sys.argv[1]:
+        print("Usage: exifMapOverlay.exe <file_path.jpg>")
+        sys.exit(0)
     
     file_path = sys.argv[1]
     settings = EmoSettings()
-    coords = get_coordinates(file_path)
+    try:
+        coords = get_coordinates(file_path)
+        # ToDo: display error message (for a very short time)
+    except UnidentifiedImageError:
+        # not a jpeg
+        borderless(os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "scratch", "NotFound.png"), 
+                   "Not a JPEG", settings.data['place_text_font_size'], display_time=1500)
+        return
+    except TypeError:
+        # no exif data found
+        borderless(os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "scratch", "NotFound.png"), 
+                   "No EXIF", settings.data['place_text_font_size'], display_time=1500)
+        return
+    except KeyError:
+        # no gps coordinates found in exif data
+        borderless(os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "scratch", "NotFound.png"), 
+                   "No Coordinates", settings.data['place_text_font_size'], display_time=1500)
+        return
     png_path = print_image(coords[0], coords[1], 
                            settings.data['map_zoom_level'],
                            settings.data['map_pixel_size_x'],
