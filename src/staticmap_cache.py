@@ -1,3 +1,7 @@
+# original work is licensed under Apache License, Version 2.0 and can be found at
+# https://github.com/komoot/staticmap/blob/master/staticmap/staticmap.py
+# orginal work is modified in the method get(self, url, **kwargs) to include caching
+
 import itertools
 import os
 import time
