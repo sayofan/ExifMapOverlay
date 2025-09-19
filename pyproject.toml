@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=80", "setuptools-scm[simple]>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "exifMapOverlay"
+dynamic = ["version"]
+authors = [
+  { name="sayofan", email="author@example.com" },
+]
+description = "A little tool to show a simple window with a map based on exif gps location."
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "Apache-2.0"
+license-files = ["LICEN[CS]E*"]
+dependencies = [
+  "OSMPythonTools>=0.3.3",
+  "Pillow",
+  "requests",
+]
+
+[project.urls]
+Homepage = "https://github.com/sayofan/ExifMapOverlay"
