@@ -3,3 +3,4 @@ dist
 exifMapOverlay.spec
 scratch
 */__pycache__
+src/exifMapOverlay.egg-info/

@@ -1,0 +1,11 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "Build to packaged executable with PyInstaller",
+            "command": "cd ${workspaceFolder}; rm -r dist; rm -r build; python -m venv ./build/emoInstallEnv; ./build/emoInstallEnv/Scripts/activate; pip install --upgrade build; python -m build; pip install --find-links=dist exifMapOverlay[installer]; python -m PyInstaller ./build/emoInstallEnv/Lib/site-packages/exifMapOverlay/__main__.py -n exifMapOverlay --onedir --noconsole --icon ./build/emoInstallEnv/Lib/site-packages/exifMapOverlay/resources/logo_emo.ico --distpath ./dist --exclude-module numpy; cp ./build/emoInstallEnv/Lib/site-packages/exifMapOverlay/resources/ ./dist/exifMapOverlay/_internal/exifMapOverlay/resources -r; rm exifMapOverlay.spec",
+            "problemMatcher": []
+        }
+    ]
+}
