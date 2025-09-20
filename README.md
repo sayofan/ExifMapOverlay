@@ -51,6 +51,12 @@ This should leave you with the folder structure
 that contains the packaged program. If you want to move the program, just move the whole 
 folder `exifMapOverlay`, i.e. the folder `_internal` must be kept next to the executable.
 
+In my expecrience, the folder _internal should end up taking about 50MB of disk space 
+(which I know is a lot for a simple tool like this.) Due to the many dependencies of 
+OSMPythonTools, there will be quite a few files in this folder that are not actually
+needed, but I can't say which exactly. The exclusion of `numpy` is highly recommended
+though, since on some distribtions, this may ship with MKL and be >500MB then.
+
 
 ## Usage
 Call exifMapOverlay with the path to a jpeg file as single argument.
