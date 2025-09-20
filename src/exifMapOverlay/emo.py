@@ -221,6 +221,11 @@ class ExifMapOverlay():
         if "--help"==sys.argv[1]:
             print("Usage: exifMapOverlay.exe <file_path.jpg>")
             sys.exit(0)
+
+        if "--version"==sys.argv[1]:
+            from importlib import metadata
+            print("exifMapOverlay " + metadata.version("exifMapOverlay"))
+            sys.exit(0)
         
         file_path = sys.argv[1]
         settings = EmoSettings()
