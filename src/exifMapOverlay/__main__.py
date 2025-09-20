@@ -1,4 +1,3 @@
-#!"D:/Conda/envs/osm/python.exe"
 
 import json
 from tkinter import ttk

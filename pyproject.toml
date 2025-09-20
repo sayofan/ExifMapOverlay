@@ -23,5 +23,8 @@ dependencies = [
   "requests",
 ]
 
+[project.optional-dependencies]
+installer = ["PyInstaller"]
+
 [project.urls]
 Homepage = "https://github.com/sayofan/ExifMapOverlay"

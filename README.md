@@ -1,27 +1,78 @@
 # ExifMapOverlay <img align="right" width="40" height="40" src="logo/logo_emo.ico">
 The purpose of this tool is to show a simple small map overlay when viewing photos.
 Intended as a nice gimmick when reviewing vacation photos.
-If a jpeg contains GeoLocation Data, fetch a map and place name from OpenStreetMap and display a small window always on top for a few seconds, then autoclose the map again.
+If a jpeg contains GeoLocation Data, fetch a map and place name from OpenStreetMap 
+and display a small window always on top for a few seconds, then autoclose the map again.
 
-I use IrfanView as image viewer, but I felt it misses this feature (in stock IrfanView, you need to press I🡒E🡒O (Info🡒Exif🡒OpenStreetMap) to view a map in the browser), with this utility, you can just assign it as external editor in IrfanView and then press <kbd>⇧ Shift</kbd> + <kbd>1</kbd> to open the map.
+I use IrfanView as image viewer, but I felt it misses this feature (in stock IrfanView, 
+you need to press I🡒E🡒O (Info🡒Exif🡒OpenStreetMap) to view a map in the browser), 
+with this utility, you can just assign it as external editor in IrfanView and then 
+press <kbd>⇧ Shift</kbd> + <kbd>1</kbd> to open the map.
 
 Here is what the overlay looks like:
 
 ![Map Overlay of Bichlbach](/doc/ExifMapOverlay_sample.png)
 
+## Installation
+Dependencies for this project are [Pillow](https://python-pillow.github.io/), 
+[request](http://www.python-requests.org/) and 
+[OSMPythonTools](https://github.com/mocnik-science/osm-python-tools). 
+The latter has quite a few dependencies itself.
+
+To install, you need python version 3.
+Simplest way is then to use pip with
+```bash
+pip install exifMapOverlay
+```
+### Compiling to executable
+You may want to package this into its own "standalone" executable. In that case, 
+I recommend to first create a new virtual python environment and then use PyInstaller
+with the `--onedir` argument.
+The most straightforward way to get an executable is to create a new folder, 
+open up a terminal inside that folder (under Windows use Powershell) and paste the following lines
+```bash
+python -m venv emoInstallEnv
+pip install exifMapOverlay[installer]
+./emoInstallEnv/Scripts/activate
+python -m PyInstaller ./emoInstallEnv/Lib/site-packages/exifMapOverlay/__main__.py -n exifMapOverlay --onedir --noconsole --icon ./emoInstallEnv/Lib/site-packages/exifMapOverlay/resources/logo_emo.ico --distpath ./dist --exclude-module numpy
+cp ./emoInstallEnv/Lib/site-packages/exifMapOverlay/resources/ ./dist/exifMapOverlay/_internal/ -r
+rm exifMapOverlay.spec
+rm -r ./build
+rm -r ./emoInstallEnv
+```
+This should leave you with the folder structure 
+```
+.
+└── dist
+    └── exifMapOverlay
+        ├── exifMapOverlay.exe
+        └── _internal
+```
+that contains the packaged program. If you want to move the program, just move the whole 
+folder `exifMapOverlay`, i.e. the folder `_internal` must be kept next to the executable.
+
+
 ## Usage
-Call ExifMapOverlay with the path to a jpeg file as single argument, example: *`ExifMapOverlay.exe 20250829_180640.jpg`*
+Call exifMapOverlay with the path to a jpeg file as single argument.
+If you have installed it as a python module, use
+```
+python -m exifMapOverlay somePhoto.jpg
+```
+If you have packaged it with PyInstaller, use 
+```
+exifMapOverlay.exe somePhoto.jpg
+```
 
-If you are using IrfanView (such as myself), you can simply set up ExifMapOverlay as am external editor, which will allow you to bring up the overlay from IrfanView by pressing e.g. <kbd>⇧ Shift</kbd> + <kbd>1</kbd>. To do so navigate to Options🡒Properties🡒Miscellaneous and add the path to ExifMapOverlay.exe (e.g. `C:\Users\sayofan\portableApps\ExifMapOverlay.exe`) as one of the external editors. There is no need to add any arguments, as IrfanView will automatically pass the current file name as first argument.
-
-## Compiling
-This project uses a slightly modified [Static Map](https://github.com/komoot/staticmap) and [OSMPythonTools](https://github.com/mocnik-science/osm-python-tools). The latter one has quite a few dependecies.
-To package into an executable file, I use PyInstaller with
-
-`python -m PyInstaller .\src\exifMapOverlay.py --onedir --noconsole --icon .\logo\logo_emo.ico`
+If you are using IrfanView (such as myself), you can simply set up exifMapOerlay as an external editor, 
+which will allow you to bring up the overlay from IrfanView by pressing e.g. <kbd>⇧ Shift</kbd> + <kbd>1</kbd>. 
+To do so navigate to Options🡒Properties🡒Miscellaneous and add the path to exifMapOverlay.exe 
+(e.g. `C:\Users\sayofan\portableApps\exifMapOverlay\exifMapOverlay.exe`) as one of the external editors. 
+There is no need to add any arguments, as IrfanView will automatically pass the current file name as first argument.
 
 ## Settings
-There are a few simple settings like position of the window which are kept in a .json file. The file is stored in the temp folder and will be created upon the first execution of ExifMapOverlay with default parameters.
+There are a few simple settings like position of the window which are kept in a .json file. 
+The file is stored in the temp folder and will be created upon the 
+first execution of exifMapOerlay with default parameters.
 The contents of the settings file are 
 ```jsonc
 {
@@ -39,7 +90,10 @@ The contents of the settings file are
 ```
 
 ## Remarks
-This uses OSMPythonTools to access Nominatim and StaticMap to access map tiles from OpenStreetMap.
-Downloaded data is cached as required by OSM when using their APIs. StaticMap was slightly modified to allow for caching. I do not set an expiration date for the cache, it is simply stored in the system's tempfolder.
+This project uses [OSMPythonTools](https://github.com/mocnik-science/osm-python-tools) 
+to access Nominatim and a slightly modified [Static Map](https://github.com/komoot/staticmap) 
+(modified for caching) to access map tiles from OpenStreetMap.
+Downloaded data is cached as required by OSM when using their APIs. I do not set an 
+expiration date for the cache, it is simply stored in the system's tempfolder.
 
 Please respect the usage policies of any tile server you use.

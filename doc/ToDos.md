@@ -1,7 +1,3 @@
 - Pfeiltasten links rechts evtl. zum Spulen des Timers verwenden.
-- add version number
 - add version and help argument to CLI
-- move NotFound.png into repo
-- move folder logo to src/resources
-- remove shebang
-- turn into pip installable module - add __init__.py; move into subfolder of src
+
