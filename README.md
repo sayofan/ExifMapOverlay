@@ -32,8 +32,8 @@ The most straightforward way to get an executable is to create a new folder,
 open up a terminal inside that folder (under Windows use Powershell) and paste the following lines
 ```bash
 python -m venv emoInstallEnv
-pip install exifMapOverlay[installer]
 ./emoInstallEnv/Scripts/activate
+pip install exifMapOverlay[installer]
 python -m PyInstaller ./emoInstallEnv/Lib/site-packages/exifMapOverlay/__main__.py -n exifMapOverlay --onedir --noconsole --icon ./emoInstallEnv/Lib/site-packages/exifMapOverlay/resources/logo_emo.ico --distpath ./dist --exclude-module numpy
 cp ./emoInstallEnv/Lib/site-packages/exifMapOverlay/resources/ ./dist/exifMapOverlay/_internal/ -r
 rm exifMapOverlay.spec
