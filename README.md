@@ -34,7 +34,7 @@ open up a terminal inside that folder (under Windows use Powershell) and paste t
 python -m venv emoInstallEnv
 ./emoInstallEnv/Scripts/activate
 pip install exifMapOverlay[installer]
-python -m PyInstaller ./emoInstallEnv/Lib/site-packages/exifMapOverlay/__main__.py -n exifMapOverlay --onedir --noconsole --icon ./emoInstallEnv/Lib/site-packages/exifMapOverlay/resources/logo_emo.ico --distpath ./dist --exclude-module numpy
+python -m PyInstaller ./emoInstallEnv/Lib/site-packages/exifMapOverlay/__main__.py -n exifMapOverlay --onedir --hide-console hide-early --icon ./emoInstallEnv/Lib/site-packages/exifMapOverlay/resources/logo_emo.ico --distpath ./dist --exclude-module numpy
 cp ./emoInstallEnv/Lib/site-packages/exifMapOverlay/resources/ ./dist/exifMapOverlay/_internal/ -r
 rm exifMapOverlay.spec
 rm -r ./build
