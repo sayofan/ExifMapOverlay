@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "exifMapOverlay"
 dynamic = ["version"]
 authors = [
-  { name="sayofan", email="author@example.com" },
+  { name="sayofan", email="sayofan@proton.me" },
 ]
 description = "A little tool to show a simple window with a map based on exif gps location."
 readme = "README.md"
@@ -14,6 +14,8 @@ requires-python = ">=3.9"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
+    "Intended Audience :: End Users/Desktop",
+    "Topic :: Multimedia :: Graphics :: Viewers",
 ]
 license = "Apache-2.0"
 license-files = ["LICEN[CS]E*"]
@@ -22,6 +24,7 @@ dependencies = [
   "Pillow",
   "requests",
 ]
+keywords = ["images", "openstreetmap", "osm", "geolocation"]
 
 [project.optional-dependencies]
 installer = ["PyInstaller"]
