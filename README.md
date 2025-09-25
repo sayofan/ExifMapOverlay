@@ -1,4 +1,4 @@
-# ExifMapOverlay <img align="right" width="40" height="40" src="src/exifMapOverlay/resources/logo_emo.ico">
+# ExifMapOverlay <img align="right" width="40" height="40" src="https://github.com/sayofan/ExifMapOverlay/blob/main/src/exifMapOverlay/resources/logo_emo.ico?raw=true">
 The purpose of this tool is to show a simple small map overlay when viewing photos.
 Intended as a nice gimmick when reviewing vacation photos.
 If a jpeg contains GeoLocation Data, fetch a map and place name from OpenStreetMap 
@@ -11,7 +11,7 @@ press <kbd>⇧ Shift</kbd> + <kbd>1</kbd> to open the map.
 
 Here is what the overlay looks like:
 
-![Map Overlay of Bichlbach](/doc/ExifMapOverlay_sample.png)
+![Map Overlay of Bichlbach](https://github.com/sayofan/ExifMapOverlay/blob/main/doc/ExifMapOverlay_sample.png?raw=true)
 
 ## Installation
 Dependencies for this project are [Pillow](https://python-pillow.github.io/), 
