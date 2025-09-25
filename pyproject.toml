@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "exifMapOverlay"
 dynamic = ["version"]
 authors = [
-  { name="sayofan", email="sayofan@proton.me" },
+  { name="sayofan", email="sayofan+exifMapOverlay@proton.me" },
 ]
 description = "A little tool to show a simple window with a map based on exif gps location."
 readme = "README.md"
