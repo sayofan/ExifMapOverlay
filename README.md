@@ -30,6 +30,9 @@ I recommend to first create a new virtual python environment and then use PyInst
 with the `--onedir` argument.
 The most straightforward way to get an executable is to create a new folder, 
 open up a terminal inside that folder (under Windows use Powershell) and paste the following lines
+<details>
+<summary>Windows Powershell</summary>
+
 ```bash
 python -m venv emoInstallEnv
 ./emoInstallEnv/Scripts/activate
@@ -40,6 +43,24 @@ rm exifMapOverlay.spec
 rm -r ./build
 rm -r ./emoInstallEnv
 ```
+</details>
+
+<details>
+<summary>Linux / macOS</summary>
+
+```bash
+python -m venv emoInstallEnv
+source ./emoInstallEnv/bin/activate
+pip install exifMapOverlay[installer]
+python -m PyInstaller ./emoInstallEnv/Lib/site-packages/exifMapOverlay/__main__.py -n exifMapOverlay --onedir --hide-console hide-early --icon ./emoInstallEnv/Lib/site-packages/exifMapOverlay/resources/logo_emo.ico --distpath ./dist --exclude-module numpy
+cp ./emoInstallEnv/Lib/site-packages/exifMapOverlay/resources/ ./dist/exifMapOverlay/_internal/exifMapOverlay/resources -r
+rm exifMapOverlay.spec
+rm -r ./build
+rm -r ./emoInstallEnv
+```
+The difference to Windows being the activation script location of the virtual environemt. Note that the `icon` and `hide-console` arguments of PyInstaller have no effect on linux.
+</details>
+
 This should leave you with the folder structure 
 ```
 .
